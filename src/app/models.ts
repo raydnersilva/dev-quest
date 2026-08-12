@@ -43,6 +43,9 @@ export interface UserProfile {
   avatar: string;
   dailyGoalMinutes: number;
   theme: 'dark' | 'light';
+  totalXp?: number;
+  level?: number;
+  githubUsername?: string;
   createdAt?: string;
   updatedAt?: string;
 }

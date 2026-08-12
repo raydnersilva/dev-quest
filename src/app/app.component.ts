@@ -6,10 +6,11 @@ import { AuthService } from './services/auth.service';
 import { AppStoreService } from './services/app-store.service';
 import { GameService } from './services/game.service';
 import { PwaService } from './services/pwa.service';
+import { GithubIntegrationService } from './services/github-integration.service';
 import {
   LucideLayoutDashboard, LucideCheckCircle, LucideBookOpen, LucideCode, LucideMenu,
   LucideMap, LucideCalendarDays, LucideTarget, LucideLanguages, LucideTrophy, LucideSettings,
-  LucideFlame, LucideZap, LucideX, LucideWifiOff, LucideDownload
+  LucideFlame, LucideZap, LucideX, LucideWifiOff, LucideDownload, LucideCrown
 } from '@lucide/angular';
 
 @Component({
@@ -19,7 +20,7 @@ import {
     CommonModule, RouterOutlet, RouterLink, RouterLinkActive, AuthPageComponent,
     LucideLayoutDashboard, LucideCheckCircle, LucideBookOpen, LucideCode, LucideMenu,
     LucideMap, LucideCalendarDays, LucideTarget, LucideLanguages, LucideTrophy, LucideSettings,
-    LucideFlame, LucideZap, LucideX, LucideWifiOff, LucideDownload
+    LucideFlame, LucideZap, LucideX, LucideWifiOff, LucideDownload, LucideCrown
   ],
   template: `
     @if (!ready()) {
@@ -48,6 +49,7 @@ import {
           <a routerLink="/plano" routerLinkActive="active" class="desktop-nav-item"><svg lucideTarget [size]="20"></svg><small>Plano</small></a>
           <a routerLink="/ingles" routerLinkActive="active" class="desktop-nav-item"><svg lucideLanguages [size]="20"></svg><small>Inglês</small></a>
           <a routerLink="/conquistas" routerLinkActive="active" class="desktop-nav-item"><svg lucideTrophy [size]="20"></svg><small>Troféus</small></a>
+          <a routerLink="/ranking" routerLinkActive="active" class="desktop-nav-item"><svg lucideCrown [size]="20"></svg><small>Ranking</small></a>
           <a routerLink="/configuracoes" routerLinkActive="active" class="desktop-nav-item"><svg lucideSettings [size]="20"></svg><small>Perfil</small></a>
           <button class="nav-more-btn mobile-only" (click)="moreMenuOpen.set(!moreMenuOpen())"><svg lucideMenu [size]="20"></svg><small>Mais</small></button>
         </nav>
@@ -61,6 +63,7 @@ import {
               <a routerLink="/plano" routerLinkActive="active" (click)="moreMenuOpen.set(false)"><svg lucideTarget [size]="20"></svg><span>Plano</span></a>
               <a routerLink="/ingles" routerLinkActive="active" (click)="moreMenuOpen.set(false)"><svg lucideLanguages [size]="20"></svg><span>Inglês</span></a>
               <a routerLink="/conquistas" routerLinkActive="active" (click)="moreMenuOpen.set(false)"><svg lucideTrophy [size]="20"></svg><span>Troféus</span></a>
+              <a routerLink="/ranking" routerLinkActive="active" (click)="moreMenuOpen.set(false)"><svg lucideCrown [size]="20"></svg><span>Ranking Global</span></a>
               <a routerLink="/configuracoes" routerLinkActive="active" (click)="moreMenuOpen.set(false)"><svg lucideSettings [size]="20"></svg><span>Perfil & Config</span></a>
             </nav>
           </div>
@@ -84,10 +87,11 @@ export class AppComponent {
   private lastRemoteUser: string | null = null;
 
   constructor(
-    public readonly auth: AuthService,
     public readonly store: AppStoreService,
+    public readonly auth: AuthService,
     public readonly game: GameService,
-    public readonly pwa: PwaService
+    public readonly pwa: PwaService,
+    private readonly githubInt: GithubIntegrationService
   ) {
     effect(() => {
       const userId = this.auth.user()?.id ?? null;

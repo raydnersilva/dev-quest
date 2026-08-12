@@ -1,4 +1,4 @@
-import { Injectable, computed } from '@angular/core';
+import { Injectable, computed, effect } from '@angular/core';
 import { allPlanDates, buildDayPlan, PHASES, PLAN_END, PLAN_START } from '../data/study-plan';
 import { Achievement, Track, WeekDayStat } from '../models';
 import { AppStoreService } from './app-store.service';
@@ -25,7 +25,12 @@ export class GameService {
   readonly achievements = computed<Achievement[]>(() => this.buildAchievements());
   readonly unlockedAchievements = computed(() => this.achievements().filter(a => a.unlocked).length);
 
-  constructor(private readonly store: AppStoreService) {}
+  constructor(private readonly store: AppStoreService) {
+    effect(() => {
+      // Sync XP to AppStore so it can be saved in Supabase
+      this.store.updateGameStats(this.xp(), this.level());
+    });
+  }
 
   xpFor(minutes: number, category: string): number {
     return Math.max(5, Math.round(minutes / 15) * 5) + (category === 'career' ? 10 : category === 'english' ? 5 : 0);

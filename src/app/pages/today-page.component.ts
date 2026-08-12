@@ -7,6 +7,7 @@ import { DayTask, Track } from '../models';
 import { AppStoreService } from '../services/app-store.service';
 import { GameService } from '../services/game.service';
 import { StudyTimerService } from '../services/study-timer.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-today-page',
@@ -69,15 +70,21 @@ import { StudyTimerService } from '../services/study-timer.service';
         <aside class="glass panel focus-aside">
           <p class="eyebrow">STATUS DO DIA</p>
           @if (timer.active()) {
-            <div class="active-focus-card">
-              <span class="focus-pulse"></span>
-              <div><small>FOCO EM ANDAMENTO</small><strong>{{ timer.active()!.taskLabel }}</strong><b>{{ timer.formatted() }}</b></div>
-              <button class="btn compact danger-ghost" (click)="stopActiveTimer()">Parar</button>
+            <div class="active-focus-card lofi-mode">
+              <div class="focus-header">
+                <span class="focus-pulse"></span>
+                <div><small>MODO FOCO PRO</small><strong>{{ timer.active()!.taskLabel }}</strong><b>{{ timer.formatted() }}</b></div>
+                <button class="btn compact danger" (click)="stopActiveTimer()">Encerrar</button>
+              </div>
+              <div class="lofi-player">
+                <iframe [src]="lofiUrl" title="Lo-Fi Radio" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
             </div>
+          } @else {
+            <div class="avatar-stage"><div class="avatar-shadow"></div><div class="avatar-bounce">{{ store.profile().avatar }}</div></div>
+            <h3>{{ dayPercent() === 100 ? 'Checkpoint alcançado!' : dayPercent() > 0 ? 'Você já começou.' : 'Primeiro passo.' }}</h3>
+            <p>{{ encouragement() }}</p>
           }
-          <div class="avatar-stage"><div class="avatar-shadow"></div><div class="avatar-bounce">{{ store.profile().avatar }}</div></div>
-          <h3>{{ dayPercent() === 100 ? 'Checkpoint alcançado!' : dayPercent() > 0 ? 'Você já começou.' : 'Primeiro passo.' }}</h3>
-          <p>{{ encouragement() }}</p>
           <div class="today-stat"><span>Meta pessoal</span><strong>{{ dayMinutes() }}/{{ store.profile().dailyGoalMinutes }} min</strong></div>
           <div class="today-stat"><span>Streak atual</span><strong>🔥 {{ game.streak() }} dias</strong></div>
           <div class="today-stat"><span>XP total</span><strong>⚡ {{ game.xp() }}</strong></div>
@@ -107,10 +114,18 @@ export class TodayPageComponent {
   readonly celebrating = signal(false);
   readonly timerMessage = signal('');
   readonly confetti = Array.from({ length: 28 }, (_, i) => i + 1);
+  readonly lofiUrl: SafeResourceUrl;
   detailMinutes = 0;
   detailNotes = '';
 
-  constructor(public readonly store: AppStoreService, public readonly game: GameService, public readonly timer: StudyTimerService) {}
+  constructor(
+    public readonly store: AppStoreService, 
+    public readonly game: GameService, 
+    public readonly timer: StudyTimerService,
+    private readonly sanitizer: DomSanitizer
+  ) {
+    this.lofiUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=0&controls=0');
+  }
 
   async toggle(task: DayTask): Promise<void> {
     const wasComplete = this.dayPercent() === 100;

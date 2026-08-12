@@ -5,11 +5,12 @@ import { PHASES } from '../data/study-plan';
 import { Track } from '../models';
 import { AppStoreService } from '../services/app-store.service';
 import { GameService } from '../services/game.service';
+import { ContributionGraphComponent } from '../components/contribution-graph.component';
 
 @Component({
   selector: 'app-journey-page',
   standalone: true,
-  imports: [CommonModule, LucideTrophy, LucideCoffee, LucideCode2, LucideCloud, LucideBrain, LucideLanguages, LucideGraduationCap, LucideFlag],
+  imports: [CommonModule, LucideTrophy, LucideCoffee, LucideCode2, LucideCloud, LucideBrain, LucideLanguages, LucideGraduationCap, LucideFlag, ContributionGraphComponent],
   template: `
     <div class="page-stack journey-page">
       <section class="hero-card glass journey-hero">
@@ -20,6 +21,8 @@ import { GameService } from '../services/game.service';
         </div>
         <div class="journey-destination"><span>{{ store.profile().avatar }}</span><i>→</i><span><svg lucideTrophy [size]="20" class="trophy-icon"></svg></span><strong>{{ game.overallPercent() }}%</strong></div>
       </section>
+
+      <app-contribution-graph></app-contribution-graph>
 
       <section class="glass panel road-summary">
         <div class="section-head"><div><p class="eyebrow">VISÃO GERAL</p><h2>Distância até Especialista</h2></div><strong>{{ game.xp() }} XP</strong></div>

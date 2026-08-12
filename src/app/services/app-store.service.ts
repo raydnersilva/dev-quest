@@ -11,7 +11,10 @@ const DEFAULT_PROFILE: UserProfile = {
   displayName: 'Dev em evolução',
   avatar: '🧑‍💻',
   dailyGoalMinutes: 120,
-  theme: 'dark'
+  theme: 'dark',
+  totalXp: 0,
+  level: 1,
+  githubUsername: ''
 };
 
 @Injectable({ providedIn: 'root' })
@@ -118,6 +121,9 @@ export class AppStoreService {
       avatar: next.avatar || DEFAULT_PROFILE.avatar,
       dailyGoalMinutes: Math.min(600, Math.max(15, Math.round(next.dailyGoalMinutes || 120))),
       theme: next.theme === 'light' ? 'light' : 'dark',
+      totalXp: next.totalXp ?? this.profile().totalXp ?? 0,
+      level: next.level ?? this.profile().level ?? 1,
+      githubUsername: next.githubUsername?.trim() || '',
       updatedAt: new Date().toISOString()
     };
     this.profile.set(cleaned);
@@ -134,6 +140,23 @@ export class AppStoreService {
       } catch {
         this.syncState.set('offline');
         this.syncMessage.set('Perfil salvo localmente; sincronizaremos depois');
+      }
+    }
+  }
+
+  async updateGameStats(totalXp: number, level: number): Promise<void> {
+    const p = this.profile();
+    if (p.totalXp === totalXp && p.level === level) return;
+    const cleaned = { ...p, totalXp, level, updatedAt: new Date().toISOString() };
+    this.profile.set(cleaned);
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(cleaned));
+    
+    // Silently sync profile if online so leaderboard is fresh
+    if (this.auth.authenticated() && !this.localOnly()) {
+      try {
+        await this.api.post<UserProfile>('/api/profile', cleaned);
+      } catch {
+        // ignore errors for background sync
       }
     }
   }
