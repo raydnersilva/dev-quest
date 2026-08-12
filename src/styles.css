@@ -80,10 +80,10 @@ code { padding: .15rem .4rem; border-radius: 7px; background: var(--surface-soft
 .top-progress strong { color:var(--text); white-space:nowrap; }
 
 .main-nav { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:55; width:min(850px,calc(100vw - 24px)); padding:7px; border-radius:22px; display:grid; grid-template-columns:repeat(10,1fr); gap:4px; }
-.main-nav a { position:relative; display:flex; min-width:0; flex-direction:column; align-items:center; justify-content:center; gap:2px; height:58px; border-radius:15px; color:var(--muted); transition:.2s ease; }
-.main-nav a span { font-size:19px; filter:grayscale(.35); }
-.main-nav a small { font-size:10px; font-weight:800; white-space:nowrap; }
-.main-nav a:hover { background:var(--surface-soft); color:var(--text); }
+.main-nav a, .nav-more-btn { position:relative; display:flex; min-width:0; flex-direction:column; align-items:center; justify-content:center; gap:2px; height:58px; border-radius:15px; color:var(--muted); transition:.2s ease; border:0; background:transparent; cursor:pointer; }
+.main-nav a span, .nav-more-btn svg { filter:grayscale(.35); }
+.main-nav a small, .nav-more-btn small { font-size:10px; font-weight:800; white-space:nowrap; }
+.main-nav a:hover, .nav-more-btn:hover { background:var(--surface-soft); color:var(--text); }
 .main-nav a.active { background:linear-gradient(135deg,rgba(124,92,255,.22),rgba(85,215,255,.12)); color:var(--text); box-shadow:inset 0 0 0 1px rgba(124,92,255,.25); }
 .main-nav a.active span { filter:none; transform:translateY(-2px); }
 
@@ -411,7 +411,7 @@ code { padding: .15rem .4rem; border-radius: 7px; background: var(--surface-soft
   .mobile-only { display:flex !important; }
   .desktop-nav-item { display:none !important; }
   .main-nav { grid-template-columns:repeat(5,1fr); justify-content:center; width:calc(100vw - 24px); bottom:12px; border-radius:22px; }
-  .main-nav a { height:54px; }
+  .main-nav a, .nav-more-btn { height:54px; }
   .content { margin-top:13px; }
   .hero-card { padding:22px; border-radius:23px; }
   .dashboard-hero,.today-hero,.journey-hero,.english-hero-page,.compact-hero,.resources-hero,.challenges-hero { display:flex; flex-direction:column; align-items:stretch; }
