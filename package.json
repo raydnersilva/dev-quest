@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
-    "vercel-build": "ng build --configuration production",
+    "vercel-build": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "typecheck": "tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
