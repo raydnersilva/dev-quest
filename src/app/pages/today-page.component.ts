@@ -73,7 +73,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
             <div class="active-focus-card lofi-mode">
               <div class="focus-header">
                 <span class="focus-pulse"></span>
-                <div><small>MODO FOCO PRO</small><strong>{{ timer.active()!.taskLabel }}</strong><b>{{ timer.formatted() }}</b></div>
+                <div class="focus-header-info"><small>MODO FOCO PRO</small><strong>{{ timer.active()!.taskLabel }}</strong><b>{{ timer.formatted() }}</b></div>
                 <div class="focus-actions">
                   <button class="btn compact ghost" (click)="hideVideo.set(!hideVideo())">{{ hideVideo() ? 'Mostrar Vídeo' : 'Ocultar Vídeo' }}</button>
                   <button class="btn compact danger" (click)="stopActiveTimer()">Encerrar</button>
