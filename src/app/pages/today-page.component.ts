@@ -74,9 +74,12 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
               <div class="focus-header">
                 <span class="focus-pulse"></span>
                 <div><small>MODO FOCO PRO</small><strong>{{ timer.active()!.taskLabel }}</strong><b>{{ timer.formatted() }}</b></div>
-                <button class="btn compact danger" (click)="stopActiveTimer()">Encerrar</button>
+                <div class="focus-actions">
+                  <button class="btn compact ghost" (click)="hideVideo.set(!hideVideo())">{{ hideVideo() ? 'Mostrar Vídeo' : 'Ocultar Vídeo' }}</button>
+                  <button class="btn compact danger" (click)="stopActiveTimer()">Encerrar</button>
+                </div>
               </div>
-              <div class="lofi-player">
+              <div class="lofi-player" [class.hidden]="hideVideo()">
                 <iframe [src]="lofiUrl()" title="Lo-Fi Radio" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </div>
             </div>
@@ -118,6 +121,7 @@ export class TodayPageComponent {
   readonly editingTask = signal<DayTask | null>(null);
   readonly celebrating = signal(false);
   readonly timerMessage = signal('');
+  readonly hideVideo = signal(false);
   readonly confetti = Array.from({ length: 28 }, (_, i) => i + 1);
   
   readonly lofiUrl = computed(() => {
