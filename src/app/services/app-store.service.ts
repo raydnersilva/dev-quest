@@ -73,7 +73,13 @@ export class AppStoreService {
         this.api.get<UserProfile>('/api/profile')
       ]);
       this.mergeRemote(remoteEntries);
-      this.profile.set({ ...DEFAULT_PROFILE, ...remoteProfile });
+      const localP = this.profile();
+      this.profile.set({ 
+        ...DEFAULT_PROFILE, 
+        ...remoteProfile,
+        githubUsername: localP.githubUsername || '',
+        youtubeFocusUrl: localP.youtubeFocusUrl || ''
+      });
       this.applyTheme();
       this.persistLocal();
       await this.syncDirty();
@@ -135,8 +141,9 @@ export class AppStoreService {
       this.syncState.set('syncing');
       try {
         const saved = await this.api.post<UserProfile>('/api/profile', cleaned);
-        this.profile.set(saved);
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(saved));
+        const merged = { ...cleaned, ...saved, githubUsername: cleaned.githubUsername, youtubeFocusUrl: cleaned.youtubeFocusUrl };
+        this.profile.set(merged);
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(merged));
         this.syncState.set('synced');
         this.syncMessage.set('Perfil sincronizado');
       } catch {
