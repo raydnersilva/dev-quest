@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { LucideLanguages, LucideExternalLink, LucideMic } from '@lucide/angular';
 import { ENGLISH_RESOURCES, ENGLISH_STAGES, TECHNICAL_PHRASES } from '../data/career-data';
 import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-english-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideLanguages, LucideExternalLink, LucideMic],
   template: `
     <div class="page-stack">
       <section class="hero-card glass english-hero-page">
         <div><p class="eyebrow">ENGLISH QUEST</p><h1>Do “Hello” até a entrevista técnica.</h1><p>30 minutos por dia, todos os dias. No início você aprende em português; aos poucos, o próprio inglês vira sua ferramenta de estudo.</p></div>
-        <div class="english-orb"><span>🇺🇸</span><strong>{{ game.englishPercent() }}%</strong><small>da trilha</small></div>
+        <div class="english-orb"><span><svg lucideLanguages [size]="40"></svg></span><strong>{{ game.englishPercent() }}%</strong><small>da trilha</small></div>
       </section>
 
       <section class="glass panel routine-panel">
@@ -36,7 +37,7 @@ import { GameService } from '../services/game.service';
         <div class="section-head"><div><p class="eyebrow">RECURSOS GRATUITOS</p><h2>Onde estudar</h2></div><span>Links externos</span></div>
         <div class="resource-grid">
           @for (resource of resources; track resource.name) {
-            <a class="resource-card" [href]="resource.url" target="_blank" rel="noopener noreferrer"><div><span>↗</span><small>DESDE {{ resource.recommendedFrom }}</small></div><strong>{{ resource.name }}</strong><p>{{ resource.description }}</p></a>
+            <a class="resource-card" [href]="resource.url" target="_blank" rel="noopener noreferrer"><div><span><svg lucideExternalLink [size]="14"></svg></span><small>DESDE {{ resource.recommendedFrom }}</small></div><strong>{{ resource.name }}</strong><p>{{ resource.description }}</p></a>
           }
         </div>
       </section>
@@ -44,7 +45,7 @@ import { GameService } from '../services/game.service';
       <section class="glass panel phrase-lab">
         <div class="section-head"><div><p class="eyebrow">TECH ENGLISH LAB</p><h2>Frase técnica do treino</h2></div><button class="btn ghost small" (click)="nextPhrase()">Outra frase</button></div>
         <div class="phrase-card"><span>EN</span><strong>{{ phrases[phraseIndex()][0] }}</strong><button class="text-button" (click)="toggleTranslation()">{{ showTranslation() ? 'Ocultar tradução' : 'Ver tradução' }}</button>@if (showTranslation()) { <p>{{ phrases[phraseIndex()][1] }}</p> }</div>
-        <div class="speaking-tip">🎙️ Leia a frase 3 vezes em voz alta. Depois tente falar olhando apenas para a tradução em português.</div>
+        <div class="speaking-tip"><svg lucideMic [size]="16" style="vertical-align:middle;margin-right:4px;"></svg> Leia a frase 3 vezes em voz alta. Depois tente falar olhando apenas para a tradução em português.</div>
       </section>
     </div>
   `

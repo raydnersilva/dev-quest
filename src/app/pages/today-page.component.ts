@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LucideCheck, LucidePlay, LucideSquare, LucideCoffee, LucideCode2, LucideLanguages, LucideCloud, LucideBrain, LucideGraduationCap, LucideChevronLeft, LucideChevronRight, LucideMoreHorizontal, LucideX } from '@lucide/angular';
 import { buildDayPlan, PLAN_END, PLAN_START } from '../data/study-plan';
 import { DayTask, Track } from '../models';
 import { AppStoreService } from '../services/app-store.service';
@@ -10,7 +11,7 @@ import { StudyTimerService } from '../services/study-timer.service';
 @Component({
   selector: 'app-today-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideCheck, LucidePlay, LucideSquare, LucideCoffee, LucideCode2, LucideLanguages, LucideCloud, LucideBrain, LucideGraduationCap, LucideChevronLeft, LucideChevronRight, LucideMoreHorizontal, LucideX],
   template: `
     <div class="page-stack">
       @if (celebrating()) { <div class="confetti-layer" aria-hidden="true">@for (piece of confetti; track piece) { <i [style.--i]="piece"></i> }</div> }
@@ -19,7 +20,7 @@ import { StudyTimerService } from '../services/study-timer.service';
         <div>
           <p class="eyebrow">MISSÃO ATUAL · FASE {{ plan().phase.id }}/24</p>
           <h1>{{ plan().phase.label }}</h1>
-          <div class="date-switcher"><button class="round" (click)="moveDate(-1)">‹</button><button class="date-button" (click)="goToday()">{{ humanDate(store.selectedDate()) }}</button><button class="round" (click)="moveDate(1)">›</button></div>
+          <div class="date-switcher"><button class="round" (click)="moveDate(-1)"><svg lucideChevronLeft [size]="20"></svg></button><button class="date-button" (click)="goToday()">{{ humanDate(store.selectedDate()) }}</button><button class="round" (click)="moveDate(1)"><svg lucideChevronRight [size]="20"></svg></button></div>
           <div class="pill-row"><span class="mode-pill">{{ plan().mode }}</span><span>{{ dayDone() }}/{{ plan().tasks.length }} concluídas</span><span>{{ dayMinutes() }} min realizados</span></div>
         </div>
         <div class="mission-score"><strong>{{ dayPercent() }}%</strong><span>do dia</span><div class="mini-progress"><i [style.width.%]="dayPercent()"></i></div></div>
@@ -33,16 +34,31 @@ import { StudyTimerService } from '../services/study-timer.service';
           }
           @for (task of plan().tasks; track task.key) {
             <div class="mission-row" [class.done]="store.isDone(store.selectedDate(), task.key)">
-              <button class="mission-check" (click)="toggle(task)">{{ store.isDone(store.selectedDate(), task.key) ? '✓' : '' }}</button>
-              <div class="mission-icon">{{ iconForTrack(task.track) }}</div>
+              <button class="mission-check" (click)="toggle(task)">
+                @if (store.isDone(store.selectedDate(), task.key)) { <svg lucideCheck [size]="20"></svg> }
+              </button>
+              <div class="mission-icon">
+                @switch(task.track) {
+                  @case ('backend') { <svg lucideCoffee [size]="20"></svg> }
+                  @case ('frontend') { <svg lucideCode2 [size]="20"></svg> }
+                  @case ('cloud') { <svg lucideCloud [size]="20"></svg> }
+                  @case ('architecture') { <svg lucideBrain [size]="20"></svg> }
+                  @case ('english') { <svg lucideLanguages [size]="20"></svg> }
+                  @case ('ads') { <svg lucideGraduationCap [size]="20"></svg> }
+                }
+              </div>
               <button class="mission-content" (click)="toggle(task)">
                 <strong>{{ task.label }}</strong>
                 <span>{{ task.minutes }} min planejados · +{{ game.xpFor(task.minutes, task.category) }} XP</span>
               </button>
               <button class="focus-button" [class.running]="timer.isRunning(store.selectedDate(), task.key)" (click)="toggleTimer(task, $event)">
-                {{ timer.isRunning(store.selectedDate(), task.key) ? '⏹ ' + timer.formatted() : '▶ Foco' }}
+                @if (timer.isRunning(store.selectedDate(), task.key)) {
+                  <svg lucideSquare [size]="14"></svg> {{ timer.formatted() }}
+                } @else {
+                  <svg lucidePlay [size]="14"></svg> Foco
+                }
               </button>
-              <button class="details-button" title="Editar minutos e anotações" (click)="openDetails(task)">•••</button>
+              <button class="details-button" title="Editar minutos e anotações" (click)="openDetails(task)"><svg lucideMoreHorizontal [size]="18"></svg></button>
             </div>
           }
           @if (plan().tasks.length && dayPercent() === 100) {
@@ -71,7 +87,7 @@ import { StudyTimerService } from '../services/study-timer.service';
       @if (editingTask()) {
         <div class="modal-backdrop" (click)="closeDetails()">
           <section class="modal-card glass" (click)="$event.stopPropagation()">
-            <div class="section-head"><div><p class="eyebrow">REGISTRO DA MISSÃO</p><h2>{{ editingTask()!.label }}</h2></div><button class="round" (click)="closeDetails()">×</button></div>
+            <div class="section-head"><div><p class="eyebrow">REGISTRO DA MISSÃO</p><h2>{{ editingTask()!.label }}</h2></div><button class="round" (click)="closeDetails()"><svg lucideX [size]="20"></svg></button></div>
             <label class="field-label">Minutos realmente estudados<input class="field" type="number" min="0" max="600" [(ngModel)]="detailMinutes"></label>
             <label class="field-label">Anotações<textarea class="field textarea" rows="6" [(ngModel)]="detailNotes" placeholder="O que aprendi? Onde tive dificuldade? O que revisar?"></textarea></label>
             <div class="modal-actions"><button class="btn ghost" (click)="closeDetails()">Cancelar</button><button class="btn primary" (click)="saveDetails()">Salvar registro</button></div>
@@ -127,7 +143,7 @@ export class TodayPageComponent {
     const current = this.store.entry(result.state.date, task.key);
     const existingMinutes = current?.minutes ?? 0;
     await this.store.saveTaskDetails(result.state.date, task, existingMinutes + result.minutes, current?.notes ?? '');
-    this.timerMessage.set(`⏱️ ${result.minutes} min adicionados a “${task.label}”.`);
+    this.timerMessage.set(`${result.minutes} min adicionados a “${task.label}”.`);
     window.setTimeout(() => this.timerMessage.set(''), 3500);
   }
 
@@ -163,9 +179,7 @@ export class TodayPageComponent {
     return new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }).format(this.parse(value));
   }
 
-  iconForTrack(track: Track): string {
-    return ({ backend: '☕', frontend: '🅰️', cloud: '☁️', architecture: '🧠', english: '🇺🇸', ads: '🎓' } as Record<Track, string>)[track];
-  }
+  // iconForTrack is handled in template now with svgs
 
   encouragement(): string {
     const p = this.dayPercent();

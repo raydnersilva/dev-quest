@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LucideFlame, LucideTimer, LucideTrophy, LucideTarget, LucideCoffee, LucideCode2, LucideLanguages, LucideCloud, LucideFlag } from '@lucide/angular';
 import { buildDayPlan, phaseFor } from '../data/study-plan';
 import { AppStoreService } from '../services/app-store.service';
 import { GameService } from '../services/game.service';
@@ -8,7 +9,7 @@ import { GameService } from '../services/game.service';
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LucideFlame, LucideTimer, LucideTrophy, LucideTarget, LucideCoffee, LucideCode2, LucideLanguages, LucideCloud, LucideFlag],
   template: `
     <div class="page-stack">
       <section class="hero-card glass dashboard-hero">
@@ -31,10 +32,10 @@ import { GameService } from '../services/game.service';
       </section>
 
       <section class="metric-grid">
-        <article class="metric-card glass"><span class="metric-icon">🔥</span><div><small>STREAK</small><strong>{{ game.streak() }} dias</strong><p>Consistência acima de intensidade.</p></div></article>
-        <article class="metric-card glass"><span class="metric-icon">⏱️</span><div><small>TEMPO ESTUDADO</small><strong>{{ game.totalHours() }} h</strong><p>{{ game.completedTasks() }} missões concluídas.</p></div></article>
-        <article class="metric-card glass"><span class="metric-icon">🏆</span><div><small>CONQUISTAS</small><strong>{{ game.unlockedAchievements() }}/{{ game.achievements().length }}</strong><p>Medalhas desbloqueadas.</p></div></article>
-        <article class="metric-card glass"><span class="metric-icon">🎯</span><div><small>JORNADA</small><strong>{{ game.overallPercent() }}%</strong><p>Rumo ao nível Especialista.</p></div></article>
+        <article class="metric-card glass"><span class="metric-icon"><svg lucideFlame [size]="24"></svg></span><div><small>STREAK</small><strong>{{ game.streak() }} dias</strong><p>Consistência acima de intensidade.</p></div></article>
+        <article class="metric-card glass"><span class="metric-icon"><svg lucideTimer [size]="24"></svg></span><div><small>TEMPO ESTUDADO</small><strong>{{ game.totalHours() }} h</strong><p>{{ game.completedTasks() }} missões concluídas.</p></div></article>
+        <article class="metric-card glass"><span class="metric-icon"><svg lucideTrophy [size]="24"></svg></span><div><small>CONQUISTAS</small><strong>{{ game.unlockedAchievements() }}/{{ game.achievements().length }}</strong><p>Medalhas desbloqueadas.</p></div></article>
+        <article class="metric-card glass"><span class="metric-icon"><svg lucideTarget [size]="24"></svg></span><div><small>JORNADA</small><strong>{{ game.overallPercent() }}%</strong><p>Rumo ao nível Especialista.</p></div></article>
       </section>
 
       <section class="dashboard-grid">
@@ -62,10 +63,10 @@ import { GameService } from '../services/game.service';
       </section>
 
       <section class="track-grid">
-        <article class="track-card backend glass"><div class="track-top"><span>☕</span><div><small>JAVA BACKEND</small><strong>{{ game.backendPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.backendPercent()"></i></div><p>Java, Spring, banco, Kafka, arquitetura e cloud.</p></article>
-        <article class="track-card frontend glass"><div class="track-top"><span>🅰️</span><div><small>FRONTEND</small><strong>{{ game.frontendPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.frontendPercent()"></i></div><p>JavaScript, TypeScript e Angular moderno.</p></article>
-        <article class="track-card english glass"><div class="track-top"><span>🇺🇸</span><div><small>INGLÊS</small><strong>{{ game.englishPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.englishPercent()"></i></div><p>Do absoluto zero até entrevista e conversação técnica.</p></article>
-        <article class="track-card cloud glass"><div class="track-top"><span>☁️</span><div><small>CLOUD / DEVOPS</small><strong>{{ game.cloudPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.cloudPercent()"></i></div><p>AWS, Kubernetes, Terraform, CI/CD e Azure.</p></article>
+        <article class="track-card backend glass"><div class="track-top"><span><svg lucideCoffee [size]="18"></svg></span><div><small>JAVA BACKEND</small><strong>{{ game.backendPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.backendPercent()"></i></div><p>Java, Spring, banco, Kafka, arquitetura e cloud.</p></article>
+        <article class="track-card frontend glass"><div class="track-top"><span><svg lucideCode2 [size]="18"></svg></span><div><small>FRONTEND</small><strong>{{ game.frontendPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.frontendPercent()"></i></div><p>JavaScript, TypeScript e Angular moderno.</p></article>
+        <article class="track-card english glass"><div class="track-top"><span><svg lucideLanguages [size]="18"></svg></span><div><small>INGLÊS</small><strong>{{ game.englishPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.englishPercent()"></i></div><p>Do absoluto zero até entrevista e conversação técnica.</p></article>
+        <article class="track-card cloud glass"><div class="track-top"><span><svg lucideCloud [size]="18"></svg></span><div><small>CLOUD / DEVOPS</small><strong>{{ game.cloudPercent() }}%</strong></div></div><div class="progress-line"><i [style.width.%]="game.cloudPercent()"></i></div><p>AWS, Kubernetes, Terraform, CI/CD e Azure.</p></article>
       </section>
 
       <section class="dashboard-grid">
@@ -81,7 +82,7 @@ import { GameService } from '../services/game.service';
 
         <article class="glass panel destination-panel">
           <p class="eyebrow">DESTINO</p>
-          <div class="destination-art">🏁 <span>🏆</span></div>
+          <div class="destination-art"><svg lucideFlag [size]="24"></svg> <span><svg lucideTrophy [size]="32"></svg></span></div>
           <h2>Especialista Full Stack</h2>
           <p>Java Backend especialista, Angular forte, cloud e inglês para entrevista técnica.</p>
           <div class="progress-line large"><i [style.width.%]="game.overallPercent()"></i></div>

@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { LucideTrophy } from '@lucide/angular';
 import { AppStoreService } from '../services/app-store.service';
 import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-achievements-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideTrophy],
   template: `
     <div class="page-stack">
       <section class="hero-card glass compact-hero">
         <div><p class="eyebrow">SALA DE TROFÉUS</p><h1>Conquistas que representam trabalho real.</h1><p>As medalhas são desbloqueadas pelo estudo concluído, horas registradas, sequência e avanço nas fases.</p></div>
-        <div class="trophy-total"><span>🏆</span><strong>{{ game.unlockedAchievements() }}/{{ game.achievements().length }}</strong></div>
+        <div class="trophy-total"><span><svg lucideTrophy [size]="20" class="trophy-icon"></svg></span><strong>{{ game.unlockedAchievements() }}/{{ game.achievements().length }}</strong></div>
       </section>
 
       <section class="achievement-grid big-grid">
