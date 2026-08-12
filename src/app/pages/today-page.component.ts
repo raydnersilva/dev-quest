@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideCheck, LucidePlay, LucideSquare, LucideCoffee, LucideCode2, LucideLanguages, LucideCloud, LucideBrain, LucideGraduationCap, LucideChevronLeft, LucideChevronRight, LucideMoreHorizontal, LucideX } from '@lucide/angular';
 import { buildDayPlan, PLAN_END, PLAN_START } from '../data/study-plan';
@@ -77,7 +77,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
                 <button class="btn compact danger" (click)="stopActiveTimer()">Encerrar</button>
               </div>
               <div class="lofi-player">
-                <iframe [src]="lofiUrl" title="Lo-Fi Radio" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe [src]="lofiUrl()" title="Lo-Fi Radio" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </div>
             </div>
           } @else {
@@ -105,6 +105,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   `
 })
 export class TodayPageComponent {
+  public readonly store = inject(AppStoreService);
+  public readonly game = inject(GameService);
+  public readonly timer = inject(StudyTimerService);
+  private readonly sanitizer = inject(DomSanitizer);
+
   readonly plan = computed(() => buildDayPlan(this.store.selectedDate()));
   readonly dayDone = computed(() => this.plan().tasks.filter(task => this.store.isDone(this.store.selectedDate(), task.key)).length);
   readonly dayPercent = computed(() => this.plan().tasks.length ? Math.round((this.dayDone() / this.plan().tasks.length) * 100) : 100);
@@ -117,7 +122,7 @@ export class TodayPageComponent {
   
   readonly lofiUrl = computed(() => {
     let customUrl = this.store.profile().youtubeFocusUrl?.trim() || '';
-    let videoId = '4xDzrUhVKVA'; // Lofi Girl 24/7 atual
+    let videoId = '4xDzrUhVKVA';
     
     if (customUrl) {
       const match = customUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
@@ -128,19 +133,11 @@ export class TodayPageComponent {
       }
     }
     
-    // Removendo loop=1 e playlist= para evitar erro "Vídeo indisponível" em transmissões ao vivo ou vídeos protegidos
-    return this.sanitizer.bypassSecurityTrustResourceUrl(\`https://www.youtube.com/embed/\${videoId}?autoplay=1&mute=0&controls=0\`);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=0`);
   });
 
   detailMinutes = 0;
   detailNotes = '';
-
-  constructor(
-    public readonly store: AppStoreService, 
-    public readonly game: GameService, 
-    public readonly timer: StudyTimerService,
-    private readonly sanitizer: DomSanitizer
-  ) {}
 
   async toggle(task: DayTask): Promise<void> {
     const wasComplete = this.dayPercent() === 100;
@@ -173,7 +170,7 @@ export class TodayPageComponent {
     const current = this.store.entry(result.state.date, task.key);
     const existingMinutes = current?.minutes ?? 0;
     await this.store.saveTaskDetails(result.state.date, task, existingMinutes + result.minutes, current?.notes ?? '');
-    this.timerMessage.set(`${result.minutes} min adicionados a “${task.label}”.`);
+    this.timerMessage.set(`${result.minutes} min adicionados a "${task.label}".`);
     window.setTimeout(() => this.timerMessage.set(''), 3500);
   }
 
@@ -208,8 +205,6 @@ export class TodayPageComponent {
   humanDate(value: string): string {
     return new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }).format(this.parse(value));
   }
-
-  // iconForTrack is handled in template now with svgs
 
   encouragement(): string {
     const p = this.dayPercent();
