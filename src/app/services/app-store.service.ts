@@ -14,7 +14,8 @@ const DEFAULT_PROFILE: UserProfile = {
   theme: 'dark',
   totalXp: 0,
   level: 1,
-  githubUsername: ''
+  githubUsername: '',
+  youtubeFocusUrl: ''
 };
 
 @Injectable({ providedIn: 'root' })
@@ -124,6 +125,7 @@ export class AppStoreService {
       totalXp: next.totalXp ?? this.profile().totalXp ?? 0,
       level: next.level ?? this.profile().level ?? 1,
       githubUsername: next.githubUsername?.trim() || '',
+      youtubeFocusUrl: next.youtubeFocusUrl?.trim() || '',
       updatedAt: new Date().toISOString()
     };
     this.profile.set(cleaned);

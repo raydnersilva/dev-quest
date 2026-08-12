@@ -46,6 +46,7 @@ export interface UserProfile {
   totalXp?: number;
   level?: number;
   githubUsername?: string;
+  youtubeFocusUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }

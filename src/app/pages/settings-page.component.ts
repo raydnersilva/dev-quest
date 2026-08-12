@@ -26,6 +26,7 @@ import { PwaService } from '../services/pwa.service';
           <div class="field-label">Avatar<div class="avatar-picker">@for (item of avatars; track item) { <button [class.active]="avatar===item" (click)="avatar=item">{{ item }}</button> }</div></div>
           <label class="field-label">Meta diária (minutos)<input class="field" type="number" min="15" max="600" step="15" [(ngModel)]="dailyGoalMinutes"></label>
           <label class="field-label">Aparência<select class="field" [(ngModel)]="theme"><option value="dark">Escuro</option><option value="light">Claro</option></select></label>
+          <label class="field-label">Vídeo Lo-Fi (YouTube)<input class="field" [(ngModel)]="youtubeFocusUrl" placeholder="Link ou ID do vídeo (opcional)"></label>
           <label class="field-label">Usuário do GitHub<input class="field" [(ngModel)]="githubUsername" placeholder="ex: seu-usuario"></label>
           <button class="btn primary" (click)="saveProfile()">Salvar perfil</button>
         </article>
@@ -90,6 +91,7 @@ export class SettingsPageComponent {
   avatar = '🧑‍💻';
   dailyGoalMinutes = 120;
   theme: 'dark' | 'light' = 'dark';
+  youtubeFocusUrl = '';
   githubUsername = '';
   newPassword = '';
 
@@ -99,11 +101,12 @@ export class SettingsPageComponent {
     this.avatar = profile.avatar;
     this.dailyGoalMinutes = profile.dailyGoalMinutes;
     this.theme = profile.theme;
+    this.youtubeFocusUrl = profile.youtubeFocusUrl || '';
     this.githubUsername = profile.githubUsername || '';
   }
 
   async saveProfile(): Promise<void> {
-    await this.store.updateProfile({ displayName: this.displayName, avatar: this.avatar, dailyGoalMinutes: this.dailyGoalMinutes, theme: this.theme, githubUsername: this.githubUsername });
+    await this.store.updateProfile({ displayName: this.displayName, avatar: this.avatar, dailyGoalMinutes: this.dailyGoalMinutes, theme: this.theme, githubUsername: this.githubUsername, youtubeFocusUrl: this.youtubeFocusUrl });
     this.message.set('Perfil salvo.');
     window.setTimeout(() => this.message.set(''), 2500);
   }

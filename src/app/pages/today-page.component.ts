@@ -114,7 +114,24 @@ export class TodayPageComponent {
   readonly celebrating = signal(false);
   readonly timerMessage = signal('');
   readonly confetti = Array.from({ length: 28 }, (_, i) => i + 1);
-  readonly lofiUrl: SafeResourceUrl;
+  
+  readonly lofiUrl = computed(() => {
+    let customUrl = this.store.profile().youtubeFocusUrl?.trim() || '';
+    let videoId = '4xDzrUhVKVA'; // Lofi Girl 24/7 atual
+    
+    if (customUrl) {
+      const match = customUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      if (match && match[1]) {
+        videoId = match[1];
+      } else if (customUrl.length === 11) {
+        videoId = customUrl;
+      }
+    }
+    
+    // Removendo loop=1 e playlist= para evitar erro "Vídeo indisponível" em transmissões ao vivo ou vídeos protegidos
+    return this.sanitizer.bypassSecurityTrustResourceUrl(\`https://www.youtube.com/embed/\${videoId}?autoplay=1&mute=0&controls=0\`);
+  });
+
   detailMinutes = 0;
   detailNotes = '';
 
@@ -123,11 +140,7 @@ export class TodayPageComponent {
     public readonly game: GameService, 
     public readonly timer: StudyTimerService,
     private readonly sanitizer: DomSanitizer
-  ) {
-    // Usando um vídeo estático (VOD) com loop infinito em vez de live stream ou playlist.
-    // Isso previne o Erro 153 do YouTube e problemas com transmissões caindo.
-    this.lofiUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/1fq4o97JidQ?autoplay=1&mute=0&controls=0&loop=1&playlist=1fq4o97JidQ');
-  }
+  ) {}
 
   async toggle(task: DayTask): Promise<void> {
     const wasComplete = this.dayPercent() === 100;
