@@ -44,7 +44,9 @@ Sempre responda em JSON válido com a estrutura exata:
 Regras:
 - Sugira exatamente 3 vídeos gratuitos do YouTube (canais reais e conhecidos, brasileiros ou internacionais)
 - Sugira exatamente 2 cursos com bom custo-benefício (Udemy, Alura, Coursera, etc.) — pode incluir gratuitos
-- URLs devem ser links reais ou de busca no YouTube (ex: https://www.youtube.com/results?search_query=...)
+- NUNCA invente links diretos (como watch?v= ou /course/...). A inteligência artificial costuma alucinar links que não existem.
+- Para vídeos, a "url" DEVE SER UM LINK DE BUSCA. Formato: https://www.youtube.com/results?search_query=NOME+DO+CANAL+TEMA+AQUI (substitua os espaços por +)
+- Para cursos, a "url" DEVE SER UM LINK DE BUSCA. Exemplo Udemy: https://www.udemy.com/courses/search/?q=NOME+DO+CURSO (substitua os espaços por +)
 - Prefira conteúdo em português para iniciantes, inglês para níveis avançados
 - A "reason" deve explicar por que aquele recurso é bom para o tópico específico
 - Considere o nível do aluno baseado na fase (1-24, onde 1=iniciante, 24=avançado)`;
