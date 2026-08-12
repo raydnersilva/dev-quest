@@ -1,11 +1,7 @@
 import type { VercelRequest } from '@vercel/node';
-import { SupabaseClient, User, createClient } from '@supabase/supabase-js';
-
-export function publicConfig(): { supabaseUrl: string; supabasePublishableKey: string; configured: boolean } {
-  const supabaseUrl = process.env['SUPABASE_URL'] ?? '';
-  const supabasePublishableKey = process.env['SUPABASE_PUBLISHABLE_KEY'] ?? process.env['SUPABASE_ANON_KEY'] ?? '';
-  return { supabaseUrl, supabasePublishableKey, configured: !!supabaseUrl && !!supabasePublishableKey };
-}
+import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
+import { publicConfig } from './config';
 
 export function bearerToken(req: VercelRequest): string | null {
   const header = req.headers.authorization;

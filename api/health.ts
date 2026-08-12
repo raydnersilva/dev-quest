@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { noStore } from './_lib/http';
-import { publicConfig } from './_lib/supabase';
+import { publicConfig } from './_lib/config';
 
 export default function handler(_req: VercelRequest, res: VercelResponse): void {
   noStore(res);
