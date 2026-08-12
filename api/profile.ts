@@ -53,7 +53,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     const theme = body.theme === 'light' ? 'light' : 'dark';
     const totalXp = Math.max(0, Math.round(Number(body.totalXp ?? 0)));
     const level = Math.max(1, Math.round(Number(body.level ?? 1)));
-    const theme = body.theme === 'light' ? 'light' : 'dark';
     if (!displayName) { res.status(400).json({ error: 'Nome inválido.' }); return; }
 
     const { data, error } = await auth.client.from('profiles').upsert({
