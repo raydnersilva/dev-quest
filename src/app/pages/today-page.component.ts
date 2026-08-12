@@ -124,7 +124,9 @@ export class TodayPageComponent {
     public readonly timer: StudyTimerService,
     private readonly sanitizer: DomSanitizer
   ) {
-    this.lofiUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=0&controls=0');
+    // Usando um vídeo estático (VOD) com loop infinito em vez de live stream ou playlist.
+    // Isso previne o Erro 153 do YouTube e problemas com transmissões caindo.
+    this.lofiUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/1fq4o97JidQ?autoplay=1&mute=0&controls=0&loop=1&playlist=1fq4o97JidQ');
   }
 
   async toggle(task: DayTask): Promise<void> {
