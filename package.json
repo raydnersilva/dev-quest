@@ -1,0 +1,37 @@
+{
+  "name": "devquest-road-to-expert",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PWA gamificada de estudos: Java Backend, Angular Frontend, Cloud e Inglês técnico.",
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build",
+    "build:prod": "ng build --configuration production",
+    "vercel-build": "ng build --configuration production",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
+  },
+  "dependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
+    "@angular/router": "^22.0.0",
+    "@angular/service-worker": "^22.0.0",
+    "@supabase/supabase-js": "^2.91.0",
+    "rxjs": "^7.8.0",
+    "tslib": "^2.8.0",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.0.0",
+    "@angular/cli": "^22.0.0",
+    "@angular/compiler-cli": "^22.0.0",
+    "@types/node": "^22.0.0",
+    "@vercel/node": "^5.0.0",
+    "typescript": "~6.0.0"
+  },
+  "engines": {
+    "node": ">=22.22.3 <23"
+  }
+}
